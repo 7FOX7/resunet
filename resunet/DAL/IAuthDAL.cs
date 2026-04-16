@@ -1,6 +1,6 @@
 ﻿using resunet.DAL.Models;
 
-namespace resunet.DAL.Auth
+namespace resunet.DAL
 {
     public interface IAuthDAL
     {

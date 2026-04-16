@@ -1,8 +1,8 @@
 ﻿using resunet.DAL.Models;
 using Dapper;
-using Microsoft.Data.SqlClient; 
+using Microsoft.Data.SqlClient;
 
-namespace resunet.DAL.Auth
+namespace resunet.DAL
 {
     public class AuthDAL : IAuthDAL
     {

@@ -8,7 +8,7 @@ namespace resunet.DAL
     {
         public async Task<UserAuth> GetUser(string email)
         {
-            using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET")))
+            using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET", EnvironmentVariableTarget.User)))
             {
                 connection.Open();
 
@@ -23,7 +23,7 @@ namespace resunet.DAL
 
         public async Task<UserAuth> GetUser(int id)
         {
-            using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET")))
+            using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET", EnvironmentVariableTarget.User)))
             {
                 connection.Open();
 
@@ -39,7 +39,7 @@ namespace resunet.DAL
         // create a user based on the model and return their id
         public async Task<int> CreateUser(UserAuth userAuth)
         {
-            using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET")))
+            using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET", EnvironmentVariableTarget.User)))
             {
                 connection.Open();
 

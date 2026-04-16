@@ -1,7 +1,14 @@
+using resunet.BLL.Auth;
+using resunet.DAL;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// register services
+builder.Services.AddSingleton<IAuthBLL, AuthBLL>();
+builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
 
 var app = builder.Build();
 

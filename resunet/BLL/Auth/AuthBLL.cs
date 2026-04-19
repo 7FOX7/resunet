@@ -1,6 +1,4 @@
-﻿using Dapper;
-using Microsoft.Data.SqlClient;
-using resunet.DAL;
+﻿using resunet.DAL;
 using resunet.DAL.Models;
 
 namespace resunet.BLL.Auth
@@ -10,7 +8,7 @@ namespace resunet.BLL.Auth
     {
         private readonly IAuthDAL authDAL;
 
-        private readonly IEncrypt encrypt; 
+        private readonly IEncrypt encrypt;
 
         public AuthBLL(IAuthDAL authDAL, IEncrypt encrypt)
         {
@@ -35,7 +33,7 @@ namespace resunet.BLL.Auth
             userAuth.Salt = Guid.NewGuid().ToString();
             userAuth.Password = encrypt.HashPassword(userAuth.Password, userAuth.Salt); 
 
-            return await authDAL.CreateUser(userAuth); 
+            return await authDAL.CreateUser(userAuth);
         }
     }
 }

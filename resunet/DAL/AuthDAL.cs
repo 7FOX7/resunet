@@ -43,9 +43,15 @@ namespace resunet.DAL
             {
                 connection.Open();
 
-                string sql = @"INSERT INTO AppUser(Email, Password, Salt, Status) VALUES(@Email, @Password, @Salt, @Status)";
+                string sql = @"
+                    INSERT INTO AppUser(Email, Password, Salt, Status) VALUES(@Email, @Password, @Salt, @Status)
+                    
+                    SELECT TOP 1 UserID 
+                    FROM AppUser
+                    ORDER BY UserID DESC
+                ";
 
-                return await connection.ExecuteAsync(sql, userAuth); 
+                return await connection.QueryFirstOrDefaultAsync<int>(sql, userAuth); 
             }
         }
     }

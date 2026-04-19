@@ -11,6 +11,11 @@ builder.Services.AddSingleton<IAuthBLL, AuthBLL>();
 builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
 builder.Services.AddSingleton<IEncrypt, Encrypt>();
 
+// will be used to work with sessions
+builder.Services.AddHttpContextAccessor(); 
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddSession(); 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,6 +28,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
 

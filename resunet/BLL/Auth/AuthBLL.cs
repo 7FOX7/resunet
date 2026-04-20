@@ -35,5 +35,25 @@ namespace resunet.BLL.Auth
 
             return await authDAL.CreateUser(userAuth);
         }
+
+        public async Task<int> Authenticate(string email, string password, bool rememberMe)
+        {
+            // try to get a user with the given email
+            UserAuth user = await GetUser(email);
+
+            // if user is not found
+            if (user.UserID is null)
+            {
+                throw new ArgumentException($"A user with email {email} doesn't exist"); 
+            }
+
+            // if passwords don't match
+            if (user.Password != encrypt.HashPassword(password, user.Salt))
+            {
+                throw new Exception();
+            }
+
+            return user.UserID ?? 0; 
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace resunet.DAL
         {
             using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET", EnvironmentVariableTarget.User)))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 // return an existing or anonymous user
                 return await connection.QueryFirstOrDefaultAsync<UserAuth>(
@@ -25,7 +25,7 @@ namespace resunet.DAL
         {
             using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET", EnvironmentVariableTarget.User)))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 // return an existing or anonymous user
                 return await connection.QueryFirstOrDefaultAsync<UserAuth>(
@@ -41,7 +41,7 @@ namespace resunet.DAL
         {
             using (var connection = new SqlConnection(Environment.GetEnvironmentVariable("CONNECTION_STRING__RESUNET", EnvironmentVariableTarget.User)))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 string sql = @"
                     INSERT INTO AppUser(Email, Password, Salt, Status) VALUES(@Email, @Password, @Salt, @Status)

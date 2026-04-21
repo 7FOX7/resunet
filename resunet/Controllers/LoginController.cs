@@ -34,10 +34,21 @@ namespace resunet.Controllers
             // check for boolean value (= check if it defaults to 'false' when null)
             if (ModelState.IsValid)
             {
-                int id = await authBLL.Authenticate(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe); 
+                try
+                {
+                    int id = await authBLL.Authenticate(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe);
 
-                Login(id);
-                return Redirect("/");
+                    Login(id);
+                    return Redirect("/");
+                }
+                catch (AuthorizationException)
+                {
+                    ModelState.TryAddModelError("Email", "Email or password is invalid"); 
+                }
+                catch
+                {
+                    // TODO
+                }
             }
 
             return View("Index", loginViewModel);

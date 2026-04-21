@@ -42,19 +42,13 @@ namespace resunet.BLL.Auth
             // try to get a user with the given email
             UserAuth user = await GetUser(email);
 
-            // if user is not found
-            if (user.UserID is null)
-            {
-                throw new ArgumentException($"A user with email {email} doesn't exist"); 
-            }
-
             // if passwords don't match
-            if (user.Password != encrypt.HashPassword(password, user.Salt))
+            if (user.UserID is not null && user.Password == encrypt.HashPassword(password, user.Salt))
             {
-                throw new Exception();
+                return user.UserID ?? 0; 
             }
 
-            return user.UserID ?? 0; 
+            throw new AuthorizationException();
         }
 
         public async Task<ValidationResult?> ValidateEmail(string email)

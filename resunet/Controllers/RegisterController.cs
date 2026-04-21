@@ -29,7 +29,20 @@ namespace resunet.Controllers
         [HttpPost]
         [Route("/register")]
         public async Task<IActionResult> IndexSave(RegisterViewModel registerViewModel)
-        { 
+        {
+            // will only be executed if all creds are valid (email, password, etc.)
+            if (ModelState.IsValid)
+            {
+                var result = await authBLL.ValidateEmail(registerViewModel.Email); 
+
+                // try to display an error
+                if (result is not null)
+                {
+                    ModelState.TryAddModelError("Email", result.ErrorMessage!); 
+                }
+            }
+
+            // will only be executed if all creds are valid (email, password, etc.)
             if (ModelState.IsValid)
             {
                 // get an id for creating a session

@@ -1,5 +1,6 @@
 ﻿using resunet.DAL;
 using resunet.DAL.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace resunet.BLL.Auth
 {
@@ -54,6 +55,19 @@ namespace resunet.BLL.Auth
             }
 
             return user.UserID ?? 0; 
+        }
+
+        public async Task<ValidationResult?> ValidateEmail(string email)
+        {
+            UserAuth user = await GetUser(email);
+            
+            // duplicate email
+            if (user.UserID is not null)
+            {
+                return new ValidationResult("User already exists"); 
+            }
+
+            return null; 
         }
     }
 }

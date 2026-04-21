@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="resunet/resunet.csproj" />
+  <Project Path="Resunet.Tests/Resunet.Tests.csproj" Id="cac475ee-4110-4313-a1ea-f320aaf07952" />
+  <Project Path="resunet/resunet.csproj" DisplayName="Resunet" />
 </Solution>

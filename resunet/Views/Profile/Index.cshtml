@@ -7,19 +7,19 @@
 <form action="/profile" method="post" enctype="multipart/form-data">
     <div>
         <label>Profile name</label>
-        <input name="ProfileName" type="text" />
+        <input name="ProfileName" type="text" value="@Model.ProfileName"/>
         <div class="error">@Html.ValidationMessageFor(m => m.ProfileName)</div>
     </div>
 
     <div>
         <label>First name</label>
-        <input name="FirstName" type="text" />
+        <input name="FirstName" type="text" value="@Model.FirstName" />
         <div class="error">@Html.ValidationMessageFor(m => m.FirstName)</div>
     </div>
     
     <div>
         <label>Last name</label>
-        <input name="LastName" type="text" />
+        <input name="LastName" type="text" value="@Model.LastName" />
         <div class="error">@Html.ValidationMessageFor(m => m.LastName)</div>
     </div>
 

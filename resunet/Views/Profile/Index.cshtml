@@ -1,0 +1,27 @@
+﻿@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile"; 
+}
+
+<form action="/profile" method="post">
+    <div>
+        <label>Profile name</label>
+        <input name="ProfileName" type="text" />
+        <div class="error">@Html.ValidationMessageFor(m => m.ProfileName)</div>
+    </div>
+
+    <div>
+        <label>First name</label>
+        <input name="FirstName" type="text" />
+        <div class="error">@Html.ValidationMessageFor(m => m.FirstName)</div>
+    </div>
+    
+    <div>
+        <label>Last name</label>
+        <input name="LastName" type="text" />
+        <div class="error">@Html.ValidationMessageFor(m => m.LastName)</div>
+    </div>
+
+    <button>Create Profile</button>
+</form>

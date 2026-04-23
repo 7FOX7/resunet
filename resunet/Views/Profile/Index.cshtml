@@ -4,7 +4,7 @@
     ViewData["Title"] = "Profile"; 
 }
 
-<form action="/profile" method="post">
+<form action="/profile" method="post" enctype="multipart/form-data">
     <div>
         <label>Profile name</label>
         <input name="ProfileName" type="text" />
@@ -21,6 +21,11 @@
         <label>Last name</label>
         <input name="LastName" type="text" />
         <div class="error">@Html.ValidationMessageFor(m => m.LastName)</div>
+    </div>
+
+    <div>
+        <label>Profile Image</label>
+        <input name="file" type="file" />
     </div>
 
     <button>Create Profile</button>

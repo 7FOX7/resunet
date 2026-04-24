@@ -14,7 +14,12 @@ builder.Services.AddSingleton<IEncrypt, Encrypt>();
 // will be used to work with sessions
 builder.Services.AddHttpContextAccessor(); 
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
-builder.Services.AddSession(); 
+// OLD: working with sessions 
+// builder.Services.AddSession(); 
+
+// scoped because we're using HttpContextAccessor here - needs to be re-created on each request
+builder.Services.AddScoped<IDbSessionBLL, DbSessionBLL>(); 
+builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
 
 var app = builder.Build();
 

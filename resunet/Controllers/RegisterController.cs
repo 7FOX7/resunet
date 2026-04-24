@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using resunet.BLL.Auth;
 using resunet.ViewModels;
-using resunet.ViewMappers; 
+using resunet.ViewMappers;
+using resunet.DAL.Models; 
 
 namespace resunet.Controllers
 {
@@ -12,10 +13,13 @@ namespace resunet.Controllers
         // TODO: when there are more services that need to be recalculated on each request, consider creating a separate service registered as scoped / transient. That service will contain all services you want to re-calculate on each request (like httpContextAccessor). You then inject that service here and in other controllers (controller are re-created on each request anyway, so that injected services will be re-created as well)
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public RegisterController(IAuthBLL authBLL, IHttpContextAccessor httpContextAccessor)
+        private readonly IDbSessionBLL dbSessionBLL; 
+
+        public RegisterController(IAuthBLL authBLL, IHttpContextAccessor httpContextAccessor, IDbSessionBLL dbSessionBLL)
         {
             this.authBLL = authBLL;
             this.httpContextAccessor = httpContextAccessor;
+            this.dbSessionBLL = dbSessionBLL;
         }
 
         [HttpGet]
@@ -48,17 +52,27 @@ namespace resunet.Controllers
                 // get an id for creating a session
                 int id = await authBLL.CreateUser(AuthMapper.MapRegisterViewModelToUserAuth(registerViewModel));
 
-                Login(id); 
+                // create a session and pass information
+                await dbSessionBLL.CreateSessionAsync(new SessionModel()
+                {
+                    CreatedAt = DateTime.Now,
+                    LastAccessedAt = DateTime.Now,
+                    UserID = id
+                }); 
+
                 return Redirect("/"); 
             }
 
             return View("Index", registerViewModel); 
         }
 
-        private void Login(int id)
-        {
-            // create a session
-            httpContextAccessor.HttpContext?.Session.SetInt32(AuthConstants.SESSION_USER_ID, id);
-        }
+
+
+        // OLD - using Microsoft session
+        //private void Login(int id)
+        //{
+        //    // create a session
+        //    httpContextAccessor.HttpContext?.Session.SetInt32(AuthConstants.SESSION_USER_ID, id);
+        //}
     }
 }

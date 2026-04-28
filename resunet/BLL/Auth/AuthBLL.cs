@@ -1,6 +1,6 @@
 ﻿using resunet.DAL;
 using resunet.DAL.Models;
-using System.ComponentModel.DataAnnotations;
+using resunet.Exceptions; 
 
 namespace resunet.BLL.Auth
 {
@@ -27,16 +27,6 @@ namespace resunet.BLL.Auth
             return await authDAL.GetUser(id);
         }
 
-        // create a user based on the model and return their id
-        public async Task<int> CreateUser(UserAuth userAuth)
-        {
-            // unique salt
-            userAuth.Salt = Guid.NewGuid().ToString();
-            userAuth.Password = encrypt.HashPassword(userAuth.Password, userAuth.Salt); 
-
-            return await authDAL.CreateUser(userAuth);
-        }
-
         public async Task<int> Authenticate(string email, string password, bool rememberMe)
         {
             // try to get a user with the given email
@@ -51,17 +41,34 @@ namespace resunet.BLL.Auth
             throw new AuthorizationException();
         }
 
-        public async Task<ValidationResult?> ValidateEmail(string email)
+        // this method combines two other methods for registering a new user: email validation and creating a new user
+        public async Task<int> Register(UserAuth userAuth)
+        {
+            // TODO: you need to make sure you have a variable assigned here because 'ValidateEmail' returns validation result / null
+            await ValidateEmail(userAuth.Email);
+            // return an id of just created user
+            return await CreateUser(userAuth); 
+        }
+
+        // create a user based on the model and return their id
+        public async Task<int> CreateUser(UserAuth userAuth)
+        {
+            // unique salt
+            userAuth.Salt = Guid.NewGuid().ToString();
+            userAuth.Password = encrypt.HashPassword(userAuth.Password, userAuth.Salt);
+
+            return await authDAL.CreateUser(userAuth);
+        }
+
+        public async Task ValidateEmail(string email)
         {
             UserAuth user = await GetUser(email);
             
             // duplicate email
             if (user.UserID is not null)
             {
-                return new ValidationResult("User already exists"); 
+                throw new DuplicateEmailException(); 
             }
-
-            return null; 
         }
     }
 }

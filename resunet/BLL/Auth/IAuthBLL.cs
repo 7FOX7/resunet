@@ -1,4 +1,5 @@
 ﻿using resunet.DAL;
+using resunet.DAL.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace resunet.BLL.Auth 
@@ -9,6 +10,8 @@ namespace resunet.BLL.Auth
         // 'Authenticate' must live in BLL (not DAL) because we are not interacting with the database directly
         Task<int> Authenticate(string email, string password, bool rememberMe);
 
-        Task<ValidationResult?> ValidateEmail(string email); 
+        Task<int> Register(UserAuth userAuth); 
+
+        Task ValidateEmail(string email); 
     }
 }

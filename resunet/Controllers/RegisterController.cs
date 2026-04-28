@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using resunet.BLL.Auth;
 using resunet.ViewModels;
-using resunet.ViewMappers; 
+using resunet.ViewMappers;
+using resunet.Exceptions;
 
 namespace resunet.Controllers
 {
@@ -33,25 +34,24 @@ namespace resunet.Controllers
             // will only be executed if all creds are valid (email, password, etc.)
             if (ModelState.IsValid)
             {
-                var result = await authBLL.ValidateEmail(registerViewModel.Email); 
-
-                // try to display an error
-                if (result is not null)
+                try
                 {
-                    ModelState.TryAddModelError("Email", result.ErrorMessage!); 
+                    // get an id for creating a session
+                    int id = await authBLL.Register(AuthMapper.MapRegisterViewModelToUserAuth(registerViewModel));
+
+                    Login(id);
+                    return Redirect("/");
+                }
+                catch (DuplicateEmailException)
+                {
+                    ModelState.TryAddModelError("Email", "User with the same email already exists");
+                }
+                catch
+                {
+                    // TODO
                 }
             }
-
-            // will only be executed if all creds are valid (email, password, etc.)
-            if (ModelState.IsValid)
-            {
-                // get an id for creating a session
-                int id = await authBLL.CreateUser(AuthMapper.MapRegisterViewModelToUserAuth(registerViewModel));
-
-                Login(id); 
-                return Redirect("/"); 
-            }
-
+            
             return View("Index", registerViewModel); 
         }
 

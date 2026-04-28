@@ -1,5 +1,6 @@
 ﻿using resunet.BLL.Auth;
 using resunet.DAL.Models;
+using resunet.Exceptions;
 
 namespace Resunet.Tests
 {
@@ -16,10 +17,7 @@ namespace Resunet.Tests
             string email = Guid.NewGuid().ToString() + "@test.com";
 
             // validate the email
-            var result = await authBLL.ValidateEmail(email);
-
-            // make sure there's no user with just created email
-            Assert.IsNull(result);
+            Assert.DoesNotThrow(delegate { authBLL.ValidateEmail(email).GetAwaiter().GetResult(); }, "Duplicate email"); 
 
             // create a user and get id
             int id = await authBLL.CreateUser(new UserAuth()
@@ -29,13 +27,10 @@ namespace Resunet.Tests
             });
 
             // validate id
-            Assert.Greater(id, 0); 
+            Assert.Greater(id, 0);
 
-            // validate the email
-            result = await authBLL.ValidateEmail(email);
-
-            // make sure there's already a user with the same email
-            Assert.IsNotNull(result);
+            // make sure an exception is thrown indicating a duplicate user
+            Assert.Throws<DuplicateEmailException>(delegate { authBLL.ValidateEmail(email).GetAwaiter().GetResult(); }); 
 
             /* get a user using id and verify it's the same user that just been added */
             UserAuth user = await authBLL.GetUser(id);
@@ -65,10 +60,7 @@ namespace Resunet.Tests
             string email = Guid.NewGuid().ToString() + "@test.com";
 
             // validate the email
-            var result = await authBLL.ValidateEmail(email);
-
-            // make sure there's no user with just created email
-            Assert.IsNull(result);
+            Assert.DoesNotThrow(delegate { authBLL.ValidateEmail(email).GetAwaiter().GetResult(); }, "Duplicate email");
 
             // create a user and get id
             int id = await authBLL.CreateUser(new UserAuth()

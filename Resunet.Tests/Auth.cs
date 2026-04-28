@@ -1,5 +1,4 @@
-﻿using resunet.BLL.Auth;
-using resunet.DAL.Models;
+﻿using resunet.DAL.Models;
 using resunet.Exceptions;
 
 namespace Resunet.Tests

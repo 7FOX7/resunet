@@ -1,4 +1,4 @@
-﻿namespace resunet.BLL.Auth
+﻿namespace resunet.Exceptions
 {
     public class AuthorizationException : Exception { }
 }
